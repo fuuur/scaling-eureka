@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context reloadable="true">
+ 	<Resource
+ 	name="datasources/MSSQLDS" 
+ 	auth="Container"
+ 	type="javax.sql.DataSource"
+ 	defaultAutoCommit="false"
+ 	maxActive="50"
+ 	maxIdle="10"
+ 	maxWait="10"
+ 	initialSize="10"
+ 	driverClassName="com.microsoft.sqlserver.jdbc.SQLServerDriver"
+ 	validationQuery="SELECT 'OK'"
+ 	testWhileIdle="true"
+ 	testOnBorrow="true"
+ 	numTestPerEvictionRun="5"
+ 	timeBetweenEvictionRunMillis="5000"
+ 	minEvictableIdleTimeMillis="60000"
+ 	antiJARLocking="false"
+ 	antiResourceLocking="false"
+ 	username="admin"
+ 	password="Boladao157"
+ 	url="jdbc:sqlserver://localhost:1433/ebook_jee/?autoReconect=true"
+ 	/>
+ 	
+
+
+</Context>
