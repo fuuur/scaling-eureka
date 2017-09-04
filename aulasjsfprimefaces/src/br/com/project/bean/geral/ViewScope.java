@@ -12,7 +12,7 @@ import org.springframework.web.context.request.FacesRequestAttributes;
 
 
 @SuppressWarnings("unchecked")
-public class viewScope implements Scope, Serializable{
+public class ViewScope implements Scope, Serializable{
 	
 	
 	/**

@@ -5,8 +5,11 @@ import java.util.HashMap;
 import javax.faces.component.UIViewRoot;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.PostConstructViewMapEvent;
+import javax.faces.event.PreDestroyViewMapEvent;
 import javax.faces.event.SystemEvent;
 import javax.faces.event.ViewMapListener;
+
+import com.sun.javafx.collections.MappingChange.Map;
 
 public class ViewScopeCallbackRegister implements ViewMapListener{
 
@@ -21,9 +24,19 @@ public class ViewScopeCallbackRegister implements ViewMapListener{
 		if (event instanceof PostConstructViewMapEvent) {
 			PostConstructViewMapEvent viewMapEvent = (PostConstructViewMapEvent) event;
 			UIViewRoot uiViewRoot = (UIViewRoot) viewMapEvent.getComponent();
-			uiViewRoot.getViewMap().put(viewScope.VIEW_SCOPE_CALLBACKS, new HashMap<String, Runnable>());
+			uiViewRoot.getViewMap().put(ViewScope.VIEW_SCOPE_CALLBACKS, new HashMap<String, Runnable>());
 		}
-		
+		else if(event instanceof PreDestroyViewMapEvent){
+			PreDestroyViewMapEvent viewMapEvent = (PreDestroyViewMapEvent) event;
+			UIViewRoot viewRoot = (UIViewRoot) viewMapEvent.getComponent();
+			Map<String, Runnable> callbaks = (Map<String, Runnable>) viewRoot.getViewMap().get(ViewScope.VIEW_SCOPE_CALLBACKS);
+			if (callbaks != null) {
+				for (Runnable c: callbaks.values()) {
+				c.run();
+				}
+				callbaks.clear();
+			}
+		}
 	}
 
 }
