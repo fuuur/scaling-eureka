@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Questionário de Estudo</title>
+
+<style>
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background: #f5f5f5;
+    text-align: center;
+  }
+
+  #contador {
+    font-size: 14px;
+    color: #555;
+  }
+
+  #pergunta {
+    font-size: 20px;
+    margin: 20px 0;
+  }
+
+  #resposta {
+    display: none;
+    margin: 15px 0;
+    padding: 15px;
+    background: #fff;
+    border-radius: 8px;
+    font-weight: bold;
+  }
+
+  .btn {
+    width: 100%;
+    padding: 15px;
+    margin: 8px 0;
+    font-size: 18px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+
+  .mostrar { background: #007aff; color: #fff; }
+  .acerto { background: #34c759; color: #fff; }
+  .erro { background: #ff3b30; color: #fff; }
+  .reset { background: #8e8e93; color: #fff; }
+</style>
+</head>
+
+<body>
+
+<h2>Questionário de Estudo</h2>
+
+<p id="contador"></p>
+
+<div id="pergunta"></div>
+<div id="resposta"></div>
+
+<button class="btn mostrar" onclick="mostrarResposta()">Mostrar resposta</button>
+<button class="btn acerto" onclick="registrar(true)">Acertei</button>
+<button class="btn erro" onclick="registrar(false)">Errei</button>
+<button class="btn reset" onclick="resetar()">Resetar Questionário</button>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+  const TOTAL_QUESTOES = 10;
+  const TEMPO_RESET_AUTOMATICO = 5000; // 5 segundos
+
+  const bancoPerguntas = [
+    { pergunta: "07: Sois Comp∴ Maç∴?", resposta: "Eu VI a estrela flamejante E:. V:. A E:. F:." },
+    { pergunta: "08: Quais são os tipos das PPal∴ do Comp∴?", resposta: "Palavra Sagrada, Palavra Semestral e Palavra de passe." },
+    { pergunta: "09: Dai-me a Pal∴ de P∴?", resposta: "Schibolet" },
+    { pergunta: "10: Qual o significado da Pal∴ de P∴?", resposta: "Simboliza a fartura e abundância, representada por uma espiga de trigo." },
+    { pergunta: "11: Como se dá a Pal∴ S∴ do Grau de Comp∴?", resposta: "Pelo ouvido direito, sussurrada as duas sílabas." },
+    { pergunta: "12: Dai-me a Pal∴ S∴?", resposta: "Jacquin" },
+    { pergunta: "13: Qual é o significado da Pal∴ S∴?", resposta: "Estabilidade e firmeza." },
+    { pergunta: "16: Onde fostes recebido Comp∴ Maçom?", resposta: "Em uma Loja justa, perfeita e regular." },
+    { pergunta: "17: Qual a idade do Comp∴?", resposta: "5 anos." },
+    { pergunta: "18: O que é ser Comp∴ Maçom?", resposta: "Ser o operário destinado a reparar imperfeições." },
+    { pergunta: "19: Como um Comp∴ se faz reconhecer?", resposta: "Pelos toques, palavras e sinais." },
+    { pergunta: "20: Qual a explicação do S∴ de Comp∴?", resposta: "Compromisso de fidelidade e sinceridade." }
+  ];
+
+  let perguntas = [];
+  let indice = 0;
+  let acertos = 0;
+  let erros = 0;
+  let timerReset = null;
+
+  function iniciar() {
+    clearTimeout(timerReset);
+    indice = 0;
+    acertos = 0;
+    erros = 0;
+
+    perguntas = [...bancoPerguntas]
+      .sort(() => Math.random() - 0.5)
+      .slice(0, TOTAL_QUESTOES);
+
+    carregarPergunta();
+  }
+
+  function carregarPergunta() {
+    if (indice >= perguntas.length) {
+      finalizar();
+      return;
+    }
+
+    document.getElementById("contador").innerText =
+      `Pergunta ${indice + 1} de ${perguntas.length}`;
+
+    document.getElementById("pergunta").innerText =
+      perguntas[indice].pergunta;
+
+    document.getElementById("resposta").style.display = "none";
+    document.getElementById("resposta").innerText =
+      "Resposta: " + perguntas[indice].resposta;
+  }
+
+  window.mostrarResposta = function () {
+    document.getElementById("resposta").style.display = "block";
+  }
+
+  window.registrar = function (acertou) {
+    acertou ? acertos++ : erros++;
+    indice++;
+    carregarPergunta();
+  }
+
+  window.resetar = function () {
+    iniciar();
+  }
+
+  function finalizar() {
+    let total = acertos + erros;
+    let porcentagem = ((acertos / total) * 100).toFixed(1);
+
+    document.body.innerHTML = `
+      <h2>Resultado Final</h2>
+      <p>✅ Acertos: ${acertos}</p>
+      <p>❌ Erros: ${erros}</p>
+      <p>📊 Aproveitamento: ${porcentagem}%</p>
+      <p>🔄 Reiniciando automaticamente em 5 segundos...</p>
+      <button class="btn reset" onclick="location.reload()">Reiniciar agora</button>
+    `;
+
+    timerReset = setTimeout(() => {
+      location.reload();
+    }, TEMPO_RESET_AUTOMATICO);
+  }
+
+  iniciar();
+});
+</script>
+
+</body>
+</html>
